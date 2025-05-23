@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.devsenior.jdavid</groupId>
-	<artifactId>api-restful-biblioteca</artifactId>
+	<artifactId>terminado-bliblioteca</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>api-restful-biblioteca</name>
+	<name>terminado-bliblioteca</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
