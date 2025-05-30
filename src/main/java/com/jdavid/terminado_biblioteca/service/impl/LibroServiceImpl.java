@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.jdavid.terminado_biblioteca.exception.BookNotFoundException;
-import com.jdavid.terminado_biblioteca.model.Libro;
 import com.jdavid.terminado_biblioteca.model.LibroStatus;
+import com.jdavid.terminado_biblioteca.model.dto.LibroRequest;
+import com.jdavid.terminado_biblioteca.model.dto.LibroResponse;
+import com.jdavid.terminado_biblioteca.model.entity.Libro;
 import com.jdavid.terminado_biblioteca.repository.LibroRepository;
 import com.jdavid.terminado_biblioteca.service.LibroService;
 
@@ -20,29 +22,29 @@ public class LibroServiceImpl implements LibroService {
     private final LibroRepository libroRepository;
 
     @Override
-    public Libro crear(Libro libro) {
-        var entity = repuesta(libro);
+    public LibroResponse crear(LibroRequest libro) {
+        var entity = entidad(libro);
         var nuevoLibro = libroRepository.save(entity);
 
         return repuesta(nuevoLibro);
     }
 
     @Override
-    public List<Libro> obtenerTodos() {
+    public List<LibroResponse> obtenerTodos() {
         return libroRepository.findAll().stream()
                 .map(this::repuesta)
                 .toList();
     }
 
     @Override
-    public Libro obetenerPorId(Long id) {
+    public LibroResponse obetenerPorId(Long id) {
         return libroRepository.findById(id)
                 .map(this::repuesta)
                 .orElseThrow(() -> new BookNotFoundException("No se encontro el libro con el id: " + id));
     }
 
     @Override
-    public Libro actualizarPorId(Long id, Libro libro) {
+    public LibroResponse actualizarPorId(Long id, LibroRequest libro) {
         var entityOpt = libroRepository.findById(id);
         if (!entityOpt.isPresent()) {
             throw new BookNotFoundException("No existe el libro");
@@ -61,7 +63,7 @@ public class LibroServiceImpl implements LibroService {
     }
 
     @Override
-    public List<Libro> obtenerPorTitulo(String titulo) {
+    public List<LibroResponse> obtenerPorTitulo(String titulo) {
         return libroRepository.findByTituloIgnoringCaseContains(titulo).stream()
                 .map(this::repuesta)
                 .toList();
@@ -93,9 +95,9 @@ public class LibroServiceImpl implements LibroService {
         libroRepository.save(libro);
     }
 
-    private Libro repuesta(Libro libro) {
-        var libroCompl = new Libro();
-        libroCompl.setId(libro.getId());
+    private LibroResponse repuesta(Libro libro) {
+        var libroCompl = new LibroResponse();
+        libroCompl.setLibroId(libro.getId());
         libroCompl.setTitulo(libro.getTitulo());
         libroCompl.setAutor(libro.getAutor());
         libroCompl.setIsbn(libro.getIsbn());
@@ -106,14 +108,13 @@ public class LibroServiceImpl implements LibroService {
         return libroCompl;
     }
 
-    private Libro entidad(Libro libro) {
+    private Libro entidad(LibroRequest libro) {
         var entity = new Libro();
         entity.setTitulo(libro.getTitulo());
         entity.setAutor(libro.getAutor());
         entity.setIsbn(libro.getIsbn());
         entity.setAñoDePublicacion(libro.getAñoDePublicacion());
         entity.setGenero(libro.getGenero());
-        entity.setEstado(libro.getEstado());
 
         return entity;
     }

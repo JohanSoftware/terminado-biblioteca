@@ -1,6 +1,8 @@
-package com.jdavid.terminado_biblioteca.model;
+package com.jdavid.terminado_biblioteca.model.entity;
 
 import java.time.LocalDate;
+
+import com.jdavid.terminado_biblioteca.model.LibroStatus;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;

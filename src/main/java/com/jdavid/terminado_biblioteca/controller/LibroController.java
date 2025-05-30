@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jdavid.terminado_biblioteca.model.Libro;
+import com.jdavid.terminado_biblioteca.model.dto.LibroRequest;
+import com.jdavid.terminado_biblioteca.model.dto.LibroResponse;
 import com.jdavid.terminado_biblioteca.service.LibroService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,25 +33,25 @@ public class LibroController {
 
     @Operation(summary = "Crear un nuevo libro", description = "Crea un nuevo libro en el sistema con los datos proporcionados.")
     @PostMapping
-    public Libro createBook(@Valid @RequestBody Libro libro) {
+    public LibroResponse createBook(@Valid @RequestBody LibroRequest libro) {
         return libroService.crear(libro);
     }
 
     @Operation(summary = "Listar todos los libros", description = "Lista de todos los libros existentes. Incluyendo libros disponibles y prestados.")
     @GetMapping
-    public List<Libro> getAll() {
+    public List<LibroResponse> getAll() {
         return libroService.obtenerTodos();
     }
 
     @Operation(summary = "Obtener libro por ID", description = "Obtiene un libro específico utilizando su identificador único.")
     @GetMapping("{id}")
-    public Libro getById(@PathVariable Long id) {
+    public LibroResponse  getById(@PathVariable Long id) {
         return libroService.obetenerPorId(id);
     }
 
     @Operation(summary = "Actualizar libro", description = "Actualiza la información de un libro existente utilizando su ID.")
     @PutMapping("{id}")
-    public Libro updateBook(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody Libro libro) {
+    public LibroResponse updateBook(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody LibroRequest libro) {
         return libroService.actualizarPorId(id, libro);
     }
 
@@ -62,20 +63,20 @@ public class LibroController {
 
     @Operation(summary = "Buscar libros por título", description = "Busca libros que coincidan con el título proporcionado.")
     @GetMapping("buscar")
-    public List<Libro> getByTitle(@RequestParam(name = "titulo") String title) {
+    public List<LibroResponse> getByTitle(@RequestParam(name = "titulo") String title) {
         return libroService.obtenerPorTitulo(title);
     }
 
     @Operation(summary = "Prestar libro", description = "Marca un libro como prestado utilizando su ID y devuelve la lista actualizada de libros.")
     @PostMapping("{id}/prestar")
-    public List<Libro> prestarLibro(@PathVariable Long id) {
+    public List<LibroResponse> prestarLibro(@PathVariable Long id) {
         libroService.prestarLibro(id);
         return libroService.obtenerTodos();
     }
 
     @Operation(summary = "Devolver libro", description = "Marca un libro como dispible utilizando su ID y devuelve la lista actualizada de libros.")
     @PutMapping("{id}/devolver")
-    public List<Libro> devolverLibro(@PathVariable Long id) {
+    public List<LibroResponse> devolverLibro(@PathVariable Long id) {
         libroService.devolverLibro(id);
         return libroService.obtenerTodos();
     }
